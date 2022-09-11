@@ -2,7 +2,11 @@ package com.github.al3xzx.italian_municipalities.entity;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 @Data
+@Entity
 public class Municipality {
   // Codice Regione
   private String codiceRegione;
@@ -57,12 +61,13 @@ public class Municipality {
 
   // Flag Comune capoluogo di provincia/città metropolitana/libero consorzio
   //true=Comune capoluogo; false=Comune non è capoluogo.
-  private Boolean capolugo;
+  private Boolean capoluogo;
 
   // Sigla automobilistica
   private String siglaAutomobilistica;
 
   // Codice Comune formato numerico
+  @Id
   private Integer codiceComuneNumerico; // todo identifier candidate
 
   // Codice Comune numerico con 110 province (dal 2010 al 2016)

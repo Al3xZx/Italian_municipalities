@@ -3,13 +3,14 @@ package com.github.al3xzx.italian_municipalities.util;
 import com.github.al3xzx.italian_municipalities.entity.Municipality;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,8 +18,10 @@ import java.util.List;
 @Slf4j
 public class CsvUtils {
 
+  private CsvUtils() {
+  }
+
   public static List<Municipality> MunicipalityCSVToPojo() {
-    Reader in;
     try {
       URL url = CsvUtils.class.getClassLoader().getResource("csvData/Elenco-comuni-italiani.csv");
       String pathFile;
@@ -27,8 +30,8 @@ public class CsvUtils {
       } else {
         pathFile = url.getPath();
       }
-      in = new FileReader(pathFile);
-      Iterable<CSVRecord> records = CSVFormat.newFormat(';').parse(in);
+      Iterable<CSVRecord> records = CSVParser.parse(
+          new File(pathFile), StandardCharsets.UTF_8, CSVFormat.newFormat(';'));
       List<Municipality> ret = new LinkedList<>();
       for (CSVRecord record : records) {
         Municipality municipality = new Municipality();
@@ -45,7 +48,7 @@ public class CsvUtils {
         municipality.setDenominazioneRegione(record.get(10));
         municipality.setDenominazioneUnitaTerritorialeSovracomunale(record.get(11));
         municipality.setTipologiaUnitaTerritorialeSovracomunale(Integer.valueOf(record.get(12)));
-        municipality.setCapolugo(Integer.parseInt(record.get(13)) != 0);
+        municipality.setCapoluogo(Integer.parseInt(record.get(13)) != 0);
         municipality.setSiglaAutomobilistica(record.get(14));
         municipality.setCodiceComuneNumerico(Integer.valueOf(record.get(15)));
         municipality.setCodiceComuneNumerico110Province(Integer.valueOf(record.get(16)));
@@ -62,7 +65,7 @@ public class CsvUtils {
       }
       return ret;
     } catch (IOException e) {
-      log.error("Error while reading data from Elenco-comuni-italiani : ", e);
+      log.error("Error while reading data from Elenco-comuni-italiani", e);
     }
     return Collections.emptyList();
   }
