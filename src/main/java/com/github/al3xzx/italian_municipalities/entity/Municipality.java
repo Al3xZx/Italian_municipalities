@@ -68,7 +68,7 @@ public class Municipality {
 
   // Codice Comune formato numerico
   @Id
-  private Integer codiceComuneNumerico; // todo identifier candidate
+  private Integer codiceComuneNumerico;
 
   // Codice Comune numerico con 110 province (dal 2010 al 2016)
   private Integer codiceComuneNumerico110Province;

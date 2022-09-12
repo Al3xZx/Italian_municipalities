@@ -6,7 +6,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -23,17 +22,22 @@ public class CsvUtils {
 
   public static List<Municipality> MunicipalityCSVToPojo() {
     try {
-      URL url = CsvUtils.class.getClassLoader().getResource("csvData/Elenco-comuni-italiani.csv");
-      String pathFile;
-      if (url == null) {
-        throw new FileNotFoundException("Cannot find the file Elenco-comuni-italiani.csv stored in resource");
-      } else {
-        pathFile = url.getPath();
-      }
-      Iterable<CSVRecord> records = CSVParser.parse(
-          new File(pathFile), StandardCharsets.UTF_8, CSVFormat.newFormat(';'));
+      Iterable<CSVRecord> records =
+          CSVParser.parse(
+              new URL("https://www.istat.it/storage/codici-unita-amministrative/Elenco-comuni-italiani.csv")
+                  .openStream(),
+              StandardCharsets.ISO_8859_1,
+              CSVFormat.DEFAULT.builder()
+                  .setDelimiter(";")
+                  .setSkipHeaderRecord(true)
+                  .build());
+
       List<Municipality> ret = new LinkedList<>();
       for (CSVRecord record : records) {
+        //this check is necessary if header is written on plus lines
+        if (record == null || !record.get(0).matches("[0-9][0-9]")) {
+          continue;
+        }
         Municipality municipality = new Municipality();
         municipality.setCodiceRegione(record.get(0));
         municipality.setCodiceUnitaTerritorialeSovracomunale(record.get(1));
@@ -64,6 +68,8 @@ public class CsvUtils {
         ret.add(municipality);
       }
       return ret;
+    } catch (FileNotFoundException e) {
+      log.error("File not found Elenco-comuni-italiani", e);
     } catch (IOException e) {
       log.error("Error while reading data from Elenco-comuni-italiani", e);
     }
