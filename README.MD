@@ -30,3 +30,8 @@ if you want to change the port or other configurations of h2 you can use the var
 java -Dserver_port=7070 -jar .\target\Italian_municipalities-0.0.1.jar
 ```
 If you use an ide like intellij these commands are available in the ide ui.
+
+
+# Acceptance Environment
+if you want to test the api the service is available at https://italian-municipalities.herokuapp.com 
+and swagger ui is available at https://italian-municipalities.herokuapp.com/swagger-ui/index.html
