@@ -13,7 +13,7 @@ public class OpenApiConfig {
   @Bean
   public OpenAPI openAPI() {
     return new OpenAPI()
-        .addServersItem(new Server().url("http://localhost:8080").description("develop server"))
+//        .addServersItem(new Server().url("http://localhost:8080").description("develop server"))
         .info(new Info().title("Italian Municipalities API")
             .description("Italian municipalities")
             .version("v0.0.1"));
